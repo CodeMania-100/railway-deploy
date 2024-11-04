@@ -30,11 +30,11 @@ function getLocalWPConfig() {
 const localConfig = getLocalWPConfig();
 
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || process.env.DATABASE_HOST,
-  user: process.env.MYSQL_USER || process.env.DATABASE_USERNAME,
-  password: process.env.MYSQL_PASSWORD || process.env.DATABASE_PASSWORD,
-  database: process.env.MYSQL_DATABASE || process.env.DATABASE_NAME,
-  port: parseInt(process.env.MYSQL_PORT || process.env.DATABASE_PORT, 10),
+  host: process.env.MYSQLHOST || 'mysql.railway.internal',
+  user: process.env.MYSQLUSER || 'root',
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQL_DATABASE || 'railway',
+  port: parseInt(process.env.MYSQLPORT || '3306', 10),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -42,6 +42,7 @@ const pool = mysql.createPool({
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000
 });
+
 async function waitForConnection(maxAttempts = 3) {
   let attempts = 0;
   while (attempts < maxAttempts) {
@@ -64,10 +65,10 @@ async function waitForConnection(maxAttempts = 3) {
 }
 
 console.log('Creating connection pool with config:', {
-  host: process.env.MYSQL_HOST || process.env.DATABASE_HOST,
-  user: process.env.MYSQL_USER || process.env.DATABASE_USERNAME,
-  database: process.env.MYSQL_DATABASE || process.env.DATABASE_NAME,
-  port: parseInt(process.env.MYSQL_PORT || process.env.DATABASE_PORT, 10)
+  host: process.env.MYSQLHOST || 'mysql.railway.internal',
+  user: process.env.MYSQLUSER || 'root',
+  database: process.env.MYSQL_DATABASE || 'railway',
+  port: parseInt(process.env.MYSQLPORT || '3306', 10)
 });
 
 
