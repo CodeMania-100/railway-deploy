@@ -30,11 +30,11 @@ function getLocalWPConfig() {
 const localConfig = getLocalWPConfig();
 
 const pool = mysql.createPool({
-  host: process.env.MARIADB_PRIVATE_HOST || 'mariadb.railway.internal',
-  user: process.env.MARIADB_USER,
-  password: process.env.MARIADB_PASSWORD,
-  database: process.env.MARIADB_DATABASE,
-  port: parseInt(process.env.MARIADB_PORT, 10) || 3306,
+  host: process.env.MYSQL_HOST || process.env.DATABASE_HOST,
+  user: process.env.MYSQL_USER || process.env.DATABASE_USERNAME,
+  password: process.env.MYSQL_PASSWORD || process.env.DATABASE_PASSWORD,
+  database: process.env.MYSQL_DATABASE || process.env.DATABASE_NAME,
+  port: parseInt(process.env.MYSQL_PORT || process.env.DATABASE_PORT, 10),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -64,10 +64,10 @@ async function waitForConnection(maxAttempts = 3) {
 }
 
 console.log('Creating connection pool with config:', {
-  host: process.env.MARIADB_PRIVATE_HOST || 'mariadb.railway.internal',
-  user: process.env.MARIADB_USER,
-  database: process.env.MARIADB_DATABASE,
-  port: parseInt(process.env.MARIADB_PORT, 10) || 3306
+  host: process.env.MYSQL_HOST || process.env.DATABASE_HOST,
+  user: process.env.MYSQL_USER || process.env.DATABASE_USERNAME,
+  database: process.env.MYSQL_DATABASE || process.env.DATABASE_NAME,
+  port: parseInt(process.env.MYSQL_PORT || process.env.DATABASE_PORT, 10)
 });
 
 
