@@ -370,16 +370,16 @@ async function verifyDatabaseStructure() {
     console.log('Databases:', databases.map(db => db.Database));
 
     const [tables] = await connection.query('SHOW TABLES');
-    console.log('Tables:', tables.map(table => table[`Tables_in_${process.env.DB_NAME}`]));
+    console.log('Tables:', tables.map(table => table[`Tables_in_railway`])); // or use process.env.MYSQL_DATABASE
 
-    if (tables.some(table => table[`Tables_in_${process.env.DB_NAME}`] === 'wp_users')) {
+    if (tables.some(table => table[`Tables_in_railway`] === 'wp_users')) {
       const [usersStructure] = await connection.query('DESCRIBE wp_users');
       console.log('wp_users structure:', usersStructure);
     } else {
       console.log('wp_users table not found');
     }
 
-    if (tables.some(table => table[`Tables_in_${process.env.DB_NAME}`] === 'wp_usermeta')) {
+    if (tables.some(table => table[`Tables_in_railway`] === 'wp_usermeta')) {
       const [usermetaStructure] = await connection.query('DESCRIBE wp_usermeta');
       console.log('wp_usermeta structure:', usermetaStructure);
     } else {
