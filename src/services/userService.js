@@ -30,17 +30,20 @@ function getLocalWPConfig() {
 const localConfig = getLocalWPConfig();
 
 const pool = mysql.createPool({
-  host: process.env.MYSQLHOST || 'mysql.railway.internal',
-  user: process.env.MYSQLUSER || 'root',
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQL_DATABASE || 'railway',
-  port: parseInt(process.env.MYSQLPORT || '3306', 10),
+  host: process.env.DB_HOST,           // Your cPanel MySQL host
+  user: process.env.DB_USER,           // Your cPanel MySQL username
+  password: process.env.DB_PASSWORD,    // Your cPanel MySQL password
+  database: process.env.DB_NAME,       // Your WordPress database name
+  port: parseInt(process.env.DB_PORT || '3306', 10),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
   connectTimeout: 30000,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 10000
+  keepAliveInitialDelay: 10000,
+  ssl: {                               // Enable SSL for remote connections
+    rejectUnauthorized: false
+  }
 });
 
 async function waitForConnection(maxAttempts = 3) {
@@ -65,12 +68,11 @@ async function waitForConnection(maxAttempts = 3) {
 }
 
 console.log('Creating connection pool with config:', {
-  host: process.env.MYSQLHOST || 'mysql.railway.internal',
-  user: process.env.MYSQLUSER || 'root',
-  database: process.env.MYSQL_DATABASE || 'railway',
-  port: parseInt(process.env.MYSQLPORT || '3306', 10)
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+  port: parseInt(process.env.DB_PORT || '3306', 10)
 });
-
 
 // Normalize phone number
 const normalizePhoneNumber = (phoneNumber) => {
