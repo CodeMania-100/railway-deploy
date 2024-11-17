@@ -75,7 +75,7 @@ async function sendUsageLimitMessage(phoneNumber) {
 }
 
 async function sendRegistrationInstructions(phoneNumber) {
-  await sendWhatsAppMessage(phoneNumber, "ברוך הבא! כדי להשתמש בשירות, אנא הירשם באתר שלנו: www.betzim.com");
+  await sendWhatsAppMessage(phoneNumber, "ברוך הבא! כדי להשתמש בשירות, אנא הירשם באתר שלנו: https://railway-wordpress-production-56c1.up.railway.app");
 }
 
 const documentQueue = new Queue('document processing');
@@ -132,7 +132,7 @@ router.post('/', async (req, res) => {
         // Register new user
         logger.log(`New user detected. Registering user with phone number: ${normalizedPhoneNumber}`);
         user = await userService.registerUser(normalizedPhoneNumber);
-        await sendWhatsAppMessage(phoneNumber, "ברוכים הבאים! נרשמת בהצלחה לתוכנית החינמית. יש לך 10 דקות של תמלול אודיו זמינות.");
+        await sendWhatsAppMessage(phoneNumber, "ברוכים הבאים! נרשמת בהצלחה לתוכנית החינמית. יש לך 10 קרדיטים של תמלול אודיו זמינות.");
         logger.log(`New user registered successfully: ${JSON.stringify(user)}`);
         await sendMainMenu(phoneNumber); // Send the main menu after registration
       }
@@ -152,10 +152,10 @@ router.post('/', async (req, res) => {
         
             await sendWhatsAppMessage(phoneNumber, transcription);
         
-            let responseMessage = `התמלול הזה השתמש ב-${duration.toFixed(2)} דקות. נשארו לך ${usageResult.timeLeft.toFixed(2)} דקות.`;
+            let responseMessage = `התמלול הזה השתמש ב-${duration.toFixed(2)} קרדיטים. נשארו לך ${usageResult.timeLeft.toFixed(2)} קרדיטים.`;
         
             if (usageResult.timeLeft <= 2) {
-              responseMessage += '\n\nמומלץ לרכוש דקות נוספות כדי להמשיך ליהנות מהשירות: www.betzim.com';
+              responseMessage += '\n\nמומלץ לרכוש קרדיטים נוספים כדי להמשיך ליהנות מהשירות: https://railway-wordpress-production-56c1.up.railway.app';
             }
         
             await sendWhatsAppMessage(phoneNumber, responseMessage);
@@ -165,7 +165,7 @@ router.post('/', async (req, res) => {
           } catch (error) {
             logger.error('Error processing audio:', error);
             if (error.message === 'Insufficient time') {
-              await sendWhatsAppMessage(phoneNumber, 'אין לך מספיק זמן נותר. אנא רכוש דקות נוספות כדי להמשיך להשתמש בשירות: www.betzim.com');
+              await sendWhatsAppMessage(phoneNumber, 'אין לך מספיק זמן נותר. אנא רכוש קרדיטים נוספים כדי להמשיך להשתמש בשירות: https://railway-wordpress-production-56c1.up.railway.app');
             } else {
               await sendWhatsAppMessage(phoneNumber, 'מצטערים, אירעה שגיאה בעת עיבוד ההודעה שלך. אנא נסה שוב מאוחר יותר.');
             }
@@ -225,7 +225,7 @@ router.post('/', async (req, res) => {
             errorMessage = 'מצטערים, חרגנו ממכסת השימוש שלנו. אנא נסה שוב מאוחר יותר.';
             logger.error('OpenAI quota exceeded');
           } else if (error.message.includes('That model is currently overloaded')) {
-            errorMessage = 'מצטערים, המערכת עמוסה כרגע. אנא נסה שוב בעוד מספר דקות.';
+            errorMessage = 'מצטערים, המערכת עמוסה כרגע. אנא נסה שוב בעוד מספר קרדיטים.';
             logger.error('OpenAI model overloaded');
           } else if (error.message.includes('Extracted text is too short or empty')) {
             errorMessage = 'מצטערים, לא הצלחנו לחלץ טקסט מהמסמך. האם המסמך מכיל טקסט קריא? אנא נסה לשלוח מסמך אחר.';
@@ -254,16 +254,16 @@ router.post('/', async (req, res) => {
               
               let balanceMessage = `החשבון שלך:\n`;
               balanceMessage += `▪️ תכנית: ${user.payment_plan || 'חינמית'}\n`;
-              balanceMessage += `▪️ סך הכל זמן בתכנית: ${usageResult.totalTime.toFixed(2)} דקות\n`;
-              balanceMessage += `▪️ זמן שנוצל: ${usageResult.usedTime.toFixed(2)} דקות\n`;
-              balanceMessage += `▪️ זמן שנשאר: ${usageResult.timeLeft.toFixed(2)} דקות\n`;
+              balanceMessage += `▪️ סך הכל זמן בתכנית: ${usageResult.totalTime.toFixed(2)} קרדיטים\n`;
+              balanceMessage += `▪️ זמן שנוצל: ${usageResult.usedTime.toFixed(2)} קרדיטים\n`;
+              balanceMessage += `▪️ זמן שנשאר: ${usageResult.timeLeft.toFixed(2)} קרדיטים\n`;
               
               if (user.subscription_end_date) {
                 balanceMessage += `▪️ המנוי מסתיים ב: ${new Date(user.subscription_end_date).toLocaleDateString()}\n`;
               }
               
               if (usageResult.timeLeft <= 2) {
-                balanceMessage += `\n לא נשארו לך הרבה דקות תמלול. מומלץ להוסיף דקות כדי להמשיך ליהנות: www.betzim.com`;
+                balanceMessage += `\n לא נשארו לך הרבה קרדיטים תמלול. מומלץ להוסיף קרדיטים כדי להמשיך ליהנות: www.betzim.com`;
               }
               
               logger.log(`Sending balance message to ${normalizedPhoneNumber}: ${balanceMessage}`);
@@ -303,10 +303,10 @@ router.post('/', async (req, res) => {
           
               await sendWhatsAppMessage(sender, transcription);
           
-              let responseMessage = `התמלול הזה השתמש ב-${duration.toFixed(2)} דקות. נשארו לך ${usageResult.timeLeft.toFixed(2)} דקות.`;
+              let responseMessage = `התמלול הזה השתמש ב-${duration.toFixed(2)} קרדיטים. נשארו לך ${usageResult.timeLeft.toFixed(2)} קרדיטים.`;
           
               if (usageResult.timeLeft <= 2) {
-                responseMessage += '\n\nמומלץ לרכוש דקות נוספות כדי להמשיך ליהנות מהשירות: www.betzim.com';
+                responseMessage += '\n\nמומלץ לרכוש קרדיטים נוספים כדי להמשיך ליהנות מהשירות: www.betzim.com';
               }
           
               await sendWhatsAppMessage(sender, responseMessage);
@@ -315,7 +315,7 @@ router.post('/', async (req, res) => {
             } catch (error) {
               logger.error('Error processing audio:', error);
               if (error.message === 'Insufficient time') {
-                await sendWhatsAppMessage(sender, 'אין לך מספיק זמן נותר. אנא רכוש דקות נוספות כדי להמשיך להשתמש בשירות: www.betzim.com');
+                await sendWhatsAppMessage(sender, 'אין לך מספיק זמן נותר. אנא רכוש קרדיטים נוספים כדי להמשיך להשתמש בשירות: www.betzim.com');
               } else {
                 await sendWhatsAppMessage(sender, 'מצטערים, אירעה שגיאה בעת עיבוד ההודעה הקולית שלך. אנא נסה שוב מאוחר יותר.');
               }
