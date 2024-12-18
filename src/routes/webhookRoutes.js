@@ -170,72 +170,73 @@ router.post('/', async (req, res) => {
               await sendWhatsAppMessage(phoneNumber, 'מצטערים, אירעה שגיאה בעת עיבוד ההודעה שלך. אנא נסה שוב מאוחר יותר.');
             }
           }
+        }
 
-        } else if (message.type === 'document') {
-          logger.log('Received document message. Full message structure:', JSON.stringify(message, null, 2));
+    //     } else if (message.type === 'document') {
+    //       logger.log('Received document message. Full message structure:', JSON.stringify(message, null, 2));
 
-      if (message.document) {
-        logger.log('Document details:', JSON.stringify(message.document, null, 2));
+    //   if (message.document) {
+    //     logger.log('Document details:', JSON.stringify(message.document, null, 2));
         
-        if (!message.document.link) {
-          logger.error('Document link is missing');
-          await sendWhatsAppMessage(phoneNumber, 'מצטערים, לא הצלחנו לקבל את הקישור למסמך. אנא נסה לשלוח שוב.');
-        }
-        try {
-          logger.log('Processing document');
-          await sendWhatsAppMessage(phoneNumber, "הקובץ שלך בתור לעיבוד. אנו נשלח לך את התוצאות בקרוב.");
-          logger.log('Sent processing message to user');
-          const result = await processDocument(message.document);
-          logger.log('Document processed:', JSON.stringify(result));
+    //     if (!message.document.link) {
+    //       logger.error('Document link is missing');
+    //       await sendWhatsAppMessage(phoneNumber, 'מצטערים, לא הצלחנו לקבל את הקישור למסמך. אנא נסה לשלוח שוב.');
+    //     }
+    //     try {
+    //       logger.log('Processing document');
+    //       await sendWhatsAppMessage(phoneNumber, "הקובץ שלך בתור לעיבוד. אנו נשלח לך את התוצאות בקרוב.");
+    //       logger.log('Sent processing message to user');
+    //       const result = await processDocument(message.document);
+    //       logger.log('Document processed:', JSON.stringify(result));
           
 
-          const { summary, processedLength } = result;
+    //       const { summary, processedLength } = result;
           
-          logger.log('Sending summary to user');
-          await sendWhatsAppMessage(phoneNumber, summary);
-          logger.log('Summary sent to user');
+    //       logger.log('Sending summary to user');
+    //       await sendWhatsAppMessage(phoneNumber, summary);
+    //       logger.log('Summary sent to user');
 
-          logger.log('Updating user document processing usage');
-          const usageResult = await userService.useDocumentProcessing(normalizedPhoneNumber, processedLength);
-          logger.log('Usage result:', JSON.stringify(usageResult));
+    //       logger.log('Updating user document processing usage');
+    //       const usageResult = await userService.useDocumentProcessing(normalizedPhoneNumber, processedLength);
+    //       logger.log('Usage result:', JSON.stringify(usageResult));
           
-          let usageMessage = `העיבוד הזה השתמש ב-${(processedLength / 1000).toFixed(2)} יחידות. נשארו לך ${usageResult.unitsLeft.toFixed(2)} יחידות.`;
-          await sendWhatsAppMessage(phoneNumber, usageMessage);
-          logger.log('Usage message sent to user');
+    //       let usageMessage = `העיבוד הזה השתמש ב-${(processedLength / 1000).toFixed(2)} יחידות. נשארו לך ${usageResult.unitsLeft.toFixed(2)} יחידות.`;
+    //       await sendWhatsAppMessage(phoneNumber, usageMessage);
+    //       logger.log('Usage message sent to user');
 
-        } catch (error) {
-          logger.error('Error processing document:', {
-            error: error.message,
-            stack: error.stack,
-            phoneNumber: phoneNumber,
-            documentId: message.document.id
-          });
+    //     } catch (error) {
+    //       logger.error('Error processing document:', {
+    //         error: error.message,
+    //         stack: error.stack,
+    //         phoneNumber: phoneNumber,
+    //         documentId: message.document.id
+    //       });
           
-          let errorMessage = 'מצטערים, אירעה שגיאה בעת עיבוד המסמך. אנא נסה שוב מאוחר יותר.';
-          if (error.message.includes('File is empty')) {
-            errorMessage = 'המסמך שנשלח ריק. אנא נסה לשלוח מסמך אחר.';
-          } else if (error.message.includes('File is too large')) {
-            errorMessage = 'המסמך גדול מדי. אנא נסה לשלוח מסמך קטן יותר (עד 20MB).';
-          } else if (error.message.includes('Incorrect file type')) {
-            errorMessage = 'סוג הקובץ אינו נתמך. אנא שלח מסמך מסוג PDF או TXT.';
-          } else if (error.message.includes('Invalid OpenAI API key')) {
-            errorMessage = 'מצטערים, יש בעיה במערכת. אנא צור קשר עם התמיכה.';
-            logger.error('Invalid OpenAI API key');
-          } else if (error.message.includes('You exceeded your current quota')) {
-            errorMessage = 'מצטערים, חרגנו ממכסת השימוש שלנו. אנא נסה שוב מאוחר יותר.';
-            logger.error('OpenAI quota exceeded');
-          } else if (error.message.includes('That model is currently overloaded')) {
-            errorMessage = 'מצטערים, המערכת עמוסה כרגע. אנא נסה שוב בעוד מספר קרדיטים.';
-            logger.error('OpenAI model overloaded');
-          } else if (error.message.includes('Extracted text is too short or empty')) {
-            errorMessage = 'מצטערים, לא הצלחנו לחלץ טקסט מהמסמך. האם המסמך מכיל טקסט קריא? אנא נסה לשלוח מסמך אחר.';
-          }
+    //       let errorMessage = 'מצטערים, אירעה שגיאה בעת עיבוד המסמך. אנא נסה שוב מאוחר יותר.';
+    //       if (error.message.includes('File is empty')) {
+    //         errorMessage = 'המסמך שנשלח ריק. אנא נסה לשלוח מסמך אחר.';
+    //       } else if (error.message.includes('File is too large')) {
+    //         errorMessage = 'המסמך גדול מדי. אנא נסה לשלוח מסמך קטן יותר (עד 20MB).';
+    //       } else if (error.message.includes('Incorrect file type')) {
+    //         errorMessage = 'סוג הקובץ אינו נתמך. אנא שלח מסמך מסוג PDF או TXT.';
+    //       } else if (error.message.includes('Invalid OpenAI API key')) {
+    //         errorMessage = 'מצטערים, יש בעיה במערכת. אנא צור קשר עם התמיכה.';
+    //         logger.error('Invalid OpenAI API key');
+    //       } else if (error.message.includes('You exceeded your current quota')) {
+    //         errorMessage = 'מצטערים, חרגנו ממכסת השימוש שלנו. אנא נסה שוב מאוחר יותר.';
+    //         logger.error('OpenAI quota exceeded');
+    //       } else if (error.message.includes('That model is currently overloaded')) {
+    //         errorMessage = 'מצטערים, המערכת עמוסה כרגע. אנא נסה שוב בעוד מספר קרדיטים.';
+    //         logger.error('OpenAI model overloaded');
+    //       } else if (error.message.includes('Extracted text is too short or empty')) {
+    //         errorMessage = 'מצטערים, לא הצלחנו לחלץ טקסט מהמסמך. האם המסמך מכיל טקסט קריא? אנא נסה לשלוח מסמך אחר.';
+    //       }
           
-          await sendWhatsAppMessage(phoneNumber, errorMessage);
-        }
-      }
-    }
-          
+    //       await sendWhatsAppMessage(phoneNumber, errorMessage);
+    //     }
+    //   }
+    // }
+        
            else if (message.type === 'text') {
             const messageBody = message.text.body.trim().toLowerCase();
             logger.log(`Received text message: "${messageBody}"`);
