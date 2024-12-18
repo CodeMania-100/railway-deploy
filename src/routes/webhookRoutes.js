@@ -26,7 +26,7 @@ async function handleUserResponse(message) {
         await sendWhatsAppMessage(sender, '🎙️ אנא שלחו הודעת אודיו בהעברה ');
         return true;
       case '2':
-        await sendWhatsAppMessage(sender, '📄 אנא שלחו מסמך טקסט (.txt), מסמך (.pdf, .docx) או מצגת (.pptx) לעיבוד');
+        await sendWhatsAppMessage(sender, 'השירות יהיה זמין בקרוב מאוד! יש למה לחכות. סיכום מסמכים שלמים בשניות');
         return true;
       case '3':
         await sendOtherServicesMenu(sender);
