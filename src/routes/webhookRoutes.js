@@ -23,7 +23,7 @@ async function handleUserResponse(message) {
   try {
     switch (messageBody) {
       case '1':
-        await sendWhatsAppMessage(sender, '🎙️ אנא שלחו הודעת אודיו בהעברה ');
+        await sendWhatsAppMessage(sender, '🎙️  שלחו הודעת אודיו לכאן ');
         return true;
       case '2':
         await sendWhatsAppMessage(sender, 'השירות יהיה זמין בקרוב מאוד! יש למה לחכות. סיכום מסמכים שלמים בשניות');
