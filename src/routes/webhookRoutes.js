@@ -283,7 +283,7 @@ router.post('/', async (req, res) => {
               //   logger.error('Failed to send menu intro', JSON.stringify({ errorId, phoneNumber }));
               // }
               // await sendMainMenu(phoneNumber); - menu if text
-              await sendWhatsAppMessage(phoneNumber, "😊 ! פשוט שלחו הודעת אודיו ואני אהפוך אותה לטקסט עבורכם. זה הכל ");
+              await sendWhatsAppMessage(phoneNumber, "  פשוט שלחו הודעת אודיו ואני אהפוך אותה לטקסט עבורכם. זה הכל 😊 !");
 
 
             }}
