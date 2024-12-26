@@ -277,11 +277,11 @@ router.post('/', async (req, res) => {
             logger.log('Calling handleUserResponse');
             const handled = await handleUserResponse(message);
             if (!handled) {
-              logger.log('Message not handled, sending main menu', JSON.stringify({ errorId, phoneNumber }));
-              const menuIntroSent = await sendWhatsAppMessage(phoneNumber, "הנה התפריט הראשי שלנו:");
-              if (!menuIntroSent) {
-                logger.error('Failed to send menu intro', JSON.stringify({ errorId, phoneNumber }));
-              }
+              // logger.log('Message not handled, sending main menu', JSON.stringify({ errorId, phoneNumber }));
+              // const menuIntroSent = await sendWhatsAppMessage(phoneNumber, "הנה התפריט הראשי שלנו:");
+              // if (!menuIntroSent) {
+              //   logger.error('Failed to send menu intro', JSON.stringify({ errorId, phoneNumber }));
+              // }
               // await sendMainMenu(phoneNumber); - menu if text
               await sendWhatsAppMessage(phoneNumber, "😊 ! פשוט שלחו הודעת אודיו ואני אהפוך אותה לטקסט עבורכם. זה הכל ");
 
