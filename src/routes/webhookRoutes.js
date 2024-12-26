@@ -132,9 +132,9 @@ router.post('/', async (req, res) => {
         // Register new user
         logger.log(`New user detected. Registering user with phone number: ${normalizedPhoneNumber}`);
         user = await userService.registerUser(normalizedPhoneNumber);
-        await sendWhatsAppMessage(phoneNumber, "ברוכים הבאים! נרשמת בהצלחה לתוכנית החינמית. יש לך 10 קרדיטים של תמלול אודיו זמינות.");
+        await sendWhatsAppMessage(phoneNumber, "😊 !ברוכים הבאים! 🎤 פשוט שלחו הודעת אודיו  ואני אהפוך אותה לטקסט עבורכם. זה הכל ");
         logger.log(`New user registered successfully: ${JSON.stringify(user)}`);
-        await sendMainMenu(phoneNumber); // Send the main menu after registration
+        // await sendMainMenu(phoneNumber); // Send the main menu after registration
       }
 
       if (user) {
