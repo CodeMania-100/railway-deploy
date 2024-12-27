@@ -132,7 +132,7 @@ router.post('/', async (req, res) => {
         // Register new user
         logger.log(`New user detected. Registering user with phone number: ${normalizedPhoneNumber}`);
         user = await userService.registerUser(normalizedPhoneNumber);
-        await sendWhatsAppMessage(phoneNumber, "😊 !ברוכים הבאים! 🎤 פשוט שלחו הודעת אודיו ואני אהפוך אותה לטקסט עבורכם. זה הכל ");
+        await sendWhatsAppMessage(phoneNumber, "*😊 !ברוכים הבאים! 🎤 פשוט שלחו הודעת אודיו ואני אהפוך אותה לטקסט עבורכם. זה הכל *");
         logger.log(`New user registered successfully: ${JSON.stringify(user)}`);
         // await sendMainMenu(phoneNumber); // Send the main menu after registration
       }
@@ -283,7 +283,7 @@ router.post('/', async (req, res) => {
               //   logger.error('Failed to send menu intro', JSON.stringify({ errorId, phoneNumber }));
               // }
               // await sendMainMenu(phoneNumber); - menu if text
-              await sendWhatsAppMessage(phoneNumber, "  פשוט שלחו הודעת אודיו ואני אהפוך אותה לטקסט עבורכם. זה הכל 😊 !");
+              await sendWhatsAppMessage(phoneNumber, "  *פשוט שלחו הודעת אודיו ואני אהפוך אותה לטקסט עבורכם. זה הכל 😊 !*");
 
 
             }}
